@@ -35,12 +35,13 @@ app.use(session({
     name: 'access_token',
     cookie: {
         secure: process.env.NODE_ENV === 'development' ? false:true,
-        httpOnly: process.env.NODE_ENV === 'development' ? true:false,
+        httpOnly: process.env.NODE_ENV === 'development' ? false:true,
         sameSite: process.env.NODE_ENV === 'development' ? false:'none'
     }
 }));
 app.use(passport.authorize('session'));
 app.use(passport.initialize());
+app.enable('trust proxy')
 
 // routes
 app.use('/api/users', userRoutes);
