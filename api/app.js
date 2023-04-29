@@ -23,12 +23,21 @@ connectPassport();
 // middlewares
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"]
+}));
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    name: 'access_token'
+    name: 'access_token',
+    cookie: {
+        secure: process.env.NODE_ENV === 'development' ? false:true,
+        httpOnly: process.env.NODE_ENV === 'development' ? true:false,
+        sameSite: process.env.NODE_ENV === 'development' ? false:'none'
+    }
 }));
 app.use(passport.authorize('session'));
 app.use(passport.initialize());
